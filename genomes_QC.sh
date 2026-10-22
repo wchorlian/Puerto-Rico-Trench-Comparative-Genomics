@@ -1,1 +1,22 @@
+# Create Conda environment to run quality control on genomes
+conda create --name quality_control
+conda info --envs
+conda list
 
+## Install mamba to install CHECKM2 and run genome QC
+conda install -n quality_control -c conda-forge mamba
+mamba install -n quality_control -c conda-forge -c bioconda checkm2
+conda list checkm2
+
+screen -S checkm2_psychromonas
+
+### Download database
+checkm2 database --download
+
+checkm2 predict \
+  --threads 8 \
+  --input /home/wchorlian/wchorlian/genomes/psychromonas_genomes \
+  --extension fasta \
+  --output-directory /home/wchorlian/wchorlian/genomes/psychromonas_genomes/checkm2_psychromonas_results
+
+## Install QUAST and run assembly QC
