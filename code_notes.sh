@@ -49,3 +49,5 @@ screen -ls ## lists current screens running
 screen -r <screen_name> ## return to previously dettached screen
 exit ## when in a screen, permanently closes it
 ### control + A followed by D dettaches from a screen
+top ## see list of screens running on server
+
