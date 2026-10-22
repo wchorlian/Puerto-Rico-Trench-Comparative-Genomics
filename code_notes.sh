@@ -11,6 +11,7 @@ mkdir -p <directory_name> ## make new directory (if it doesn't already exist)
 rm ## remove item(s)
 rm -r <directory_name> ## removes directory and all items in directory
 cp ## copy item(s)
+^C ## keyboard interupt
 
 # file info commands
 ls -lh ## lists files in long format
@@ -40,7 +41,3 @@ for f in *; do
 
 # count files in given directory
 find <directory_name> -maxdepth 1 -type f | wc -l
-
-
-
- 
