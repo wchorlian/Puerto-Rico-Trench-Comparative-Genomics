@@ -19,4 +19,10 @@ checkm2 predict \
   --extension fasta \
   --output-directory /home/wchorlian/wchorlian/genomes/psychromonas_genomes/checkm2_psychromonas_results
 
+  checkm2 predict \
+  --threads 8 \
+  --input /home/wchorlian/wchorlian/genomes/shewanella_genomes \
+  --extension fasta \
+  --output-directory /home/wchorlian/wchorlian/genomes/shewanella_genomes/checkm2_shewanella_results
+
 ## Install QUAST and run assembly QC
