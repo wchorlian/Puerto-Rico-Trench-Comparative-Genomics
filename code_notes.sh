@@ -41,3 +41,10 @@ for f in *; do
 
 # count files in given directory
 find <directory_name> -maxdepth 1 -type f | wc -l
+
+# screen commands
+screen -S <screen_name> ## creates new screen
+screen -ls ## lists current screens running
+screen -r <screen_name> ## return to previously closed screen
+exit ## when in a screen, permanently closes it
+### control + A followed by D closes out of a screen
