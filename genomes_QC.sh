@@ -2,6 +2,7 @@
 conda create --name quality_control
 conda info --envs
 conda list
+conda activate quality_control
 
 ## Install mamba to install CHECKM2 and run genome QC
 conda install -n quality_control -c conda-forge mamba
