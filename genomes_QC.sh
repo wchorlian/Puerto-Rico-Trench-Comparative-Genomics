@@ -27,3 +27,5 @@ checkm2 predict \
   --output-directory /home/wchorlian/wchorlian/genomes/shewanella_genomes/checkm2_shewanella_results
 
 ## Install QUAST and run assembly QC
+mamba install -n quality_control -c conda-forge -c bioconda python=3.11 quast
+
