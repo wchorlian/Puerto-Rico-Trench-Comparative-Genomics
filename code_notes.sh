@@ -38,7 +38,7 @@ for f in *; do
 # move items
  mv * <directory_name>/ ## move all items in current directory to new directory
  mv <file_name> <directory_name>/ ## move a single file to new directory
- scp -r <folder_filepath> <directory_filepath> ## copies a folder from personal computer to a directory on the server
+ scp -r <folder_filepath> <wchorlian@fram.ucsd.edu:/directory_filepath> ## copies a folder from personal computer to a directory on the server
 
 # count files in given directory
 find <directory_name> -maxdepth 1 -type f | wc -l
