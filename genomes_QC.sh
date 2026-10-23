@@ -38,3 +38,5 @@ quast.py \
   /home/wchorlian/wchorlian/genomes/shewanella_genomes/*.fasta \
   --threads 8 \
   -o /home/wchorlian/wchorlian/genomes/shewanella_genomes/quast_shewanella_results
+
+##Install GTDB-Tk and run classifications
