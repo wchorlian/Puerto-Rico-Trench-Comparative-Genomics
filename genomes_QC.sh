@@ -29,3 +29,12 @@ checkm2 predict \
 ## Install QUAST and run assembly QC
 mamba install -n quality_control -c conda-forge -c bioconda python=3.11 quast
 
+quast.py \
+  /home/wchorlian/wchorlian/genomes/psychromonas_genomes/*.fasta \
+  --threads 8 \
+  -o /home/wchorlian/wchorlian/genomes/psychromonas_genomes/quast_psychromonas_results
+
+quast.py \
+  /home/wchorlian/wchorlian/genomes/shewanella_genomes/*.fasta \
+  --threads 8 \
+  -o /home/wchorlian/wchorlian/genomes/shewanella_genomes/quast_shewanella_results
