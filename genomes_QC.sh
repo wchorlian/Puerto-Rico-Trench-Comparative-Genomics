@@ -10,8 +10,9 @@ mamba install -n quality_control -c conda-forge -c bioconda checkm2
 conda list checkm2
 
 screen -S checkm2_psychromonas
+screen -S checkm2_shewanella
 
-### Download database
+### Download checkM2 database
 checkm2 database --download
 
 checkm2 predict \
@@ -40,3 +41,4 @@ quast.py \
   -o /home/wchorlian/wchorlian/genomes/shewanella_genomes/quast_shewanella_results
 
 ##Install GTDB-Tk and run classifications
+mamba install -c conda-forge -c bioconda gtdbtk=2.7.2
