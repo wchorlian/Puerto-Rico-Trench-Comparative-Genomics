@@ -42,3 +42,16 @@ quast.py \
 
 ##Install GTDB-Tk and run classifications
 mamba install -c conda-forge -c bioconda gtdbtk=2.7.2
+export GTDBTK_DATA_PATH=/data_store/gtdbtk_files/release232 ###Set database path
+
+gtdbtk classify_wf \
+  --genome_dir /home/wchorlian/wchorlian/genomes/psychromonas_genomes \
+  --extension fasta \
+  --out_dir /home/wchorlian/wchorlian/genomes/psychromonas_genomes/gtdbtk_results \
+  --cpus 8
+
+gtdbtk classify_wf \
+  --genome_dir /home/wchorlian/wchorlian/genomes/shewanella_genomes \
+  --extension fasta \
+  --out_dir /home/wchorlian/wchorlian/genomes/shewanella_genomes/gtdbtk_results \
+  --cpus 8
