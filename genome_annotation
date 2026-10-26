@@ -1,2 +1,5 @@
 # Install bakta and run annotation
 mamba create -n bakta -c conda-forge -c bioconda bakta -y
+bakta_db download \  ## Download light bakta database
+  --output /home/wchorlian/databases/bakta_database_light \
+  --type light
