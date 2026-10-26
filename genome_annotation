@@ -1,2 +1,2 @@
-#Install bakta and run annotation
+# Install bakta and run annotation
 mamba create -n bakta -c conda-forge -c bioconda bakta -y
