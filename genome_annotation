@@ -51,3 +51,5 @@ for genome in "$GENOME_DIR"/*.fasta; do
         "$genome" \
     || echo "FAILED: $name"
 done
+
+If you use these results please cite Bakta: https://doi.org/10.1099/mgen.0.000685
