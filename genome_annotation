@@ -7,3 +7,47 @@ mamba install -n bakta -c conda-forge -c bioconda bakta=1.12.2 -y
 bakta_db download \  ## Download light bakta database
   --output /home/wchorlian/databases/bakta_database_light \
   --type light
+
+export BAKTA_DB=/home/wchorlian/databases/bakta_light/db-light ## Set database pathway
+
+GENOME_DIR=/home/wchorlian/wchorlian/genomes/psychromonas_genomes
+OUT_DIR="$GENOME_DIR/bakta_results"
+
+mkdir -p "$OUT_DIR"
+
+for genome in "$GENOME_DIR"/*.fasta; do
+    [ -f "$genome" ] || continue
+
+    name=$(basename "$genome" .fasta)
+
+    echo "Annotating $name"
+
+    bakta \
+        --db "$BAKTA_DB" \
+        --output "$OUT_DIR/$name" \
+        --prefix "$name" \
+        --threads 8 \
+        "$genome" \
+    || echo "FAILED: $name"
+done
+
+GENOME_DIR=/home/wchorlian/wchorlian/genomes/shewanella_genomes
+OUT_DIR="$GENOME_DIR/bakta_results"
+
+mkdir -p "$OUT_DIR"
+
+for genome in "$GENOME_DIR"/*.fasta; do
+    [ -f "$genome" ] || continue
+
+    name=$(basename "$genome" .fasta)
+
+    echo "Annotating $name"
+
+    bakta \
+        --db "$BAKTA_DB" \
+        --output "$OUT_DIR/$name" \
+        --prefix "$name" \
+        --threads 8 \
+        "$genome" \
+    || echo "FAILED: $name"
+done
