@@ -1,1 +1,7 @@
-
+# ijo
+```{r genome size}
+dssf
+fs
+fsf
+s
+```
