@@ -10,18 +10,13 @@ bakta_db download \  ## Download light bakta database
 
 export BAKTA_DB=/home/wchorlian/databases/bakta_light/db-light ##Set database pathway
 
-GENOME_DIR=/home/wchorlian/wchorlian/genomes/psychromonas_genomes
+GENOME_DIR=/scratch/wchorlian/genomes/psychromonas_genomes
 OUT_DIR="$GENOME_DIR/bakta_results"
-
 mkdir -p "$OUT_DIR"
-
 for genome in "$GENOME_DIR"/*.fasta; do
     [ -f "$genome" ] || continue
-
     name=$(basename "$genome" .fasta)
-
     echo "Annotating $name"
-
     bakta \
         --db "$BAKTA_DB" \
         --output "$OUT_DIR/$name" \
@@ -31,18 +26,61 @@ for genome in "$GENOME_DIR"/*.fasta; do
     || echo "FAILED: $name"
 done
 
-GENOME_DIR=/home/wchorlian/wchorlian/genomes/shewanella_genomes
+GENOME_DIR=/scratch/wchorlian/genomes/shewanella_genomes
 OUT_DIR="$GENOME_DIR/bakta_results"
-
 mkdir -p "$OUT_DIR"
-
 for genome in "$GENOME_DIR"/*.fasta; do
     [ -f "$genome" ] || continue
-
     name=$(basename "$genome" .fasta)
-
     echo "Annotating $name"
+    bakta \
+        --db "$BAKTA_DB" \
+        --output "$OUT_DIR/$name" \
+        --prefix "$name" \
+        --threads 8 \
+        "$genome" \
+    || echo "FAILED: $name"
+done
 
+GENOME_DIR=/scratch/wchorlian/genomes/colwellia_genomes
+OUT_DIR="$GENOME_DIR/bakta_results"
+mkdir -p "$OUT_DIR"
+for genome in "$GENOME_DIR"/*.fna; do
+    [ -f "$genome" ] || continue
+    name=$(basename "$genome" .fna)
+    echo "Annotating $name"
+    bakta \
+        --db "$BAKTA_DB" \
+        --output "$OUT_DIR/$name" \
+        --prefix "$name" \
+        --threads 8 \
+        "$genome" \
+    || echo "FAILED: $name"
+done
+
+GENOME_DIR=/scratch/wchorlian/genomes/moritella_genomes
+OUT_DIR="$GENOME_DIR/bakta_results"
+mkdir -p "$OUT_DIR"
+for genome in "$GENOME_DIR"/*.fna; do
+    [ -f "$genome" ] || continue
+    name=$(basename "$genome" .fna)
+    echo "Annotating $name"
+    bakta \
+        --db "$BAKTA_DB" \
+        --output "$OUT_DIR/$name" \
+        --prefix "$name" \
+        --threads 8 \
+        "$genome" \
+    || echo "FAILED: $name"
+done
+
+GENOME_DIR=/scratch/wchorlian/genomes/photobacterium_genomes
+OUT_DIR="$GENOME_DIR/bakta_results"
+mkdir -p "$OUT_DIR"
+for genome in "$GENOME_DIR"/*.fna; do
+    [ -f "$genome" ] || continue
+    name=$(basename "$genome" .fna)
+    echo "Annotating $name"
     bakta \
         --db "$BAKTA_DB" \
         --output "$OUT_DIR/$name" \
@@ -59,23 +97,17 @@ nano combine_psychromonas_bakta_json.py  #Create python script to combine .json 
 import json  #Paste script into text window and save using crtl + O and enter, and then close out using ctrl + X
 import csv
 from pathlib import Path
-
 input_dir = Path(
-    "/home/wchorlian/wchorlian/genomes/psychromonas_genomes/bakta_results"
+    "/scratch/wchorlian/genomes/psychromonas_genomes/bakta_results"
 )
-
 output_csv = input_dir.parent / "psychromonas_genome_statistics.csv"
-
 rows = []
-
 for file in sorted(input_dir.rglob("*.json")):
     try:
         with open(file, "r", encoding="utf-8") as f:
             data = json.load(f)
-
         stats = data.get("stats", {})
         genome_info = data.get("genome", {})
-
         rows.append({
             "genome": file.parent.name,
             "json_file": file.name,
@@ -96,17 +128,14 @@ for file in sorted(input_dir.rglob("*.json")):
                 if stats.get("coding_ratio") is not None else None
             ),
         })
-
     except (json.JSONDecodeError, OSError) as error:
         print(f"Error reading {file}: {error}")
-
 if not rows:
     print(f"No readable JSON files found in {input_dir}")
 else:
     columns = list(dict.fromkeys(
         key for row in rows for key in row
     ))
-
     if output_csv.exists():
         print(f"Output already exists: {output_csv}")
         print("Rename or move it before running again.")
@@ -115,7 +144,6 @@ else:
             writer = csv.DictWriter(f, fieldnames=columns)
             writer.writeheader()
             writer.writerows(rows)
-
         print(f"Processed {len(rows)} JSON files.")
         print(f"CSV saved to: {output_csv}")
 
@@ -124,23 +152,17 @@ nano combine_shewanella_bakta_json.py  #Create python script to combine .json re
 import json
 import csv
 from pathlib import Path
-
 input_dir = Path(
-    "/home/wchorlian/wchorlian/genomes/shewanella_genomes/bakta_results"
+    "/scratch/wchorlian/genomes/shewanella_genomes/bakta_results"
 )
-
 output_csv = input_dir.parent / "shewanella_genome_statistics.csv"
-
 rows = []
-
 for file in sorted(input_dir.rglob("*.json")):
     try:
         with open(file, "r", encoding="utf-8") as f:
             data = json.load(f)
-
         stats = data.get("stats", {})
         genome_info = data.get("genome", {})
-
         rows.append({
             "genome": file.parent.name,
             "json_file": file.name,
@@ -161,17 +183,14 @@ for file in sorted(input_dir.rglob("*.json")):
                 if stats.get("coding_ratio") is not None else None
             ),
         })
-
     except (json.JSONDecodeError, OSError) as error:
         print(f"Error reading {file}: {error}")
-
 if not rows:
     print(f"No readable JSON files found in {input_dir}")
 else:
     columns = list(dict.fromkeys(
         key for row in rows for key in row
     ))
-
     if output_csv.exists():
         print(f"Output already exists: {output_csv}")
         print("Rename or move it before running again.")
@@ -180,7 +199,176 @@ else:
             writer = csv.DictWriter(f, fieldnames=columns)
             writer.writeheader()
             writer.writerows(rows)
-
         print(f"Processed {len(rows)} JSON files.")
         print(f"CSV saved to: {output_csv}")
 
+nano combine_colwellia_bakta_json.py  #Create python script to combine .json results for colwellia
+
+import json
+import csv
+from pathlib import Path
+input_dir = Path(
+    "/scratch/wchorlian/genomes/colwellia_genomes/bakta_results"
+)
+output_csv = input_dir.parent / "colwellia_genome_statistics.csv"
+rows = []
+for file in sorted(input_dir.rglob("*.json")):
+    try:
+        with open(file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        stats = data.get("stats", {})
+        genome_info = data.get("genome", {})
+        rows.append({
+            "genome": file.parent.name,
+            "json_file": file.name,
+            "genus": genome_info.get("genus"),
+            "species": genome_info.get("species"),
+            "strain": genome_info.get("strain"),
+            "complete": genome_info.get("complete"),
+            "genome_size_bp": stats.get("size"),
+            "gc_content_percent": (
+                stats["gc"] * 100
+                if stats.get("gc") is not None else None
+            ),
+            "n_ratio": stats.get("n_ratio"),
+            "n50_bp": stats.get("n50"),
+            "n90_bp": stats.get("n90"),
+            "coding_ratio_percent": (
+                stats["coding_ratio"] * 100
+                if stats.get("coding_ratio") is not None else None
+            ),
+        })
+    except (json.JSONDecodeError, OSError) as error:
+        print(f"Error reading {file}: {error}")
+if not rows:
+    print(f"No readable JSON files found in {input_dir}")
+else:
+    columns = list(dict.fromkeys(
+        key for row in rows for key in row
+    ))
+    if output_csv.exists():
+        print(f"Output already exists: {output_csv}")
+        print("Rename or move it before running again.")
+    else:
+        with open(output_csv, "x", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=columns)
+            writer.writeheader()
+            writer.writerows(rows)
+        print(f"Processed {len(rows)} JSON files.")
+        print(f"CSV saved to: {output_csv}")
+
+python3 combine_colwellia_bakta_json.py  #Run python script for colwellia
+
+nano combine_moritella_bakta_json.py  #Create python script to combine .json results for moritella
+
+import json
+import csv
+from pathlib import Path
+input_dir = Path(
+    "/scratch/wchorlian/genomes/moritella_genomes/bakta_results"
+)
+output_csv = input_dir.parent / "moritella_genome_statistics.csv"
+rows = []
+for file in sorted(input_dir.rglob("*.json")):
+    try:
+        with open(file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        stats = data.get("stats", {})
+        genome_info = data.get("genome", {})
+        rows.append({
+            "genome": file.parent.name,
+            "json_file": file.name,
+            "genus": genome_info.get("genus"),
+            "species": genome_info.get("species"),
+            "strain": genome_info.get("strain"),
+            "complete": genome_info.get("complete"),
+            "genome_size_bp": stats.get("size"),
+            "gc_content_percent": (
+                stats["gc"] * 100
+                if stats.get("gc") is not None else None
+            ),
+            "n_ratio": stats.get("n_ratio"),
+            "n50_bp": stats.get("n50"),
+            "n90_bp": stats.get("n90"),
+            "coding_ratio_percent": (
+                stats["coding_ratio"] * 100
+                if stats.get("coding_ratio") is not None else None
+            ),
+        })
+    except (json.JSONDecodeError, OSError) as error:
+        print(f"Error reading {file}: {error}")
+if not rows:
+    print(f"No readable JSON files found in {input_dir}")
+else:
+    columns = list(dict.fromkeys(
+        key for row in rows for key in row
+    ))
+    if output_csv.exists():
+        print(f"Output already exists: {output_csv}")
+        print("Rename or move it before running again.")
+    else:
+        with open(output_csv, "x", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=columns)
+            writer.writeheader()
+            writer.writerows(rows)
+        print(f"Processed {len(rows)} JSON files.")
+        print(f"CSV saved to: {output_csv}")
+
+python3 combine_moritella_bakta_json.py  #Run python script for moritella
+
+nano combine_photobacterium_bakta_json.py  #Create python script to combine .json results for photobacterium
+
+import json
+import csv
+from pathlib import Path
+input_dir = Path(
+    "/scratch/wchorlian/genomes/photobacterium_genomes/bakta_results"
+)
+output_csv = input_dir.parent / "photobacterium_genome_statistics.csv"
+rows = []
+for file in sorted(input_dir.rglob("*.json")):
+    try:
+        with open(file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        stats = data.get("stats", {})
+        genome_info = data.get("genome", {})
+        rows.append({
+            "genome": file.parent.name,
+            "json_file": file.name,
+            "genus": genome_info.get("genus"),
+            "species": genome_info.get("species"),
+            "strain": genome_info.get("strain"),
+            "complete": genome_info.get("complete"),
+            "genome_size_bp": stats.get("size"),
+            "gc_content_percent": (
+                stats["gc"] * 100
+                if stats.get("gc") is not None else None
+            ),
+            "n_ratio": stats.get("n_ratio"),
+            "n50_bp": stats.get("n50"),
+            "n90_bp": stats.get("n90"),
+            "coding_ratio_percent": (
+                stats["coding_ratio"] * 100
+                if stats.get("coding_ratio") is not None else None
+            ),
+        })
+    except (json.JSONDecodeError, OSError) as error:
+        print(f"Error reading {file}: {error}")
+if not rows:
+    print(f"No readable JSON files found in {input_dir}")
+else:
+    columns = list(dict.fromkeys(
+        key for row in rows for key in row
+    ))
+    if output_csv.exists():
+        print(f"Output already exists: {output_csv}")
+        print("Rename or move it before running again.")
+    else:
+        with open(output_csv, "x", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=columns)
+            writer.writeheader()
+            writer.writerows(rows)
+        print(f"Processed {len(rows)} JSON files.")
+        print(f"CSV saved to: {output_csv}")
+
+python3 combine_photobacterium_bakta_json.py  #Run python script for photobacterium
