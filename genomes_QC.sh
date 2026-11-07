@@ -27,6 +27,24 @@ checkm2 predict \
   --extension fasta \
   --output-directory /home/wchorlian/wchorlian/genomes/shewanella_genomes/checkm2_shewanella_results
 
+checkm2 predict \
+  --threads 8 \
+  --input /scratch/wchorlian/genomes/colwellia_genomes \
+  --extension fna \
+  --output-directory /scratch/wchorlian/genomes/colwellia_genomes/checkm2_colwellia_results
+
+checkm2 predict \
+  --threads 8 \
+  --input /scratch/wchorlian/genomes/moritella_genomes \
+  --extension fna \
+  --output-directory /scratch/wchorlian/genomes/moritella_genomes/checkm2_moritella_results
+
+checkm2 predict \
+  --threads 8 \
+  --input /scratch/wchorlian/genomes/photobacterium_genomes \
+  --extension fna \
+  --output-directory /scratch/wchorlian/genomes/photobacterium_genomes/checkm2_photobacterium_results
+
 ## Install QUAST and run assembly QC
 mamba install -n quality_control -c conda-forge -c bioconda python=3.11 quast
 
