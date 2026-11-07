@@ -11,21 +11,24 @@ conda list checkm2
 
 screen -S checkm2_psychromonas
 screen -S checkm2_shewanella
+screen -S checkm2_colwellia
+screen -S checkm2_moritella
+screen -S checkm2_photobacterium
 
 ### Download checkM2 database
 checkm2 database --download
 
 checkm2 predict \
   --threads 8 \
-  --input /home/wchorlian/wchorlian/genomes/psychromonas_genomes \
+  --input /scratch/wchorlian/genomes/psychromonas_genomes \
   --extension fasta \
-  --output-directory /home/wchorlian/wchorlian/genomes/psychromonas_genomes/checkm2_psychromonas_results
+  --output-directory /scratch/wchorlian/genomes/psychromonas_genomes/checkm2_psychromonas_results
 
   checkm2 predict \
   --threads 8 \
-  --input /home/wchorlian/wchorlian/genomes/shewanella_genomes \
+  --input /scratch/wchorlian/genomes/shewanella_genomes \
   --extension fasta \
-  --output-directory /home/wchorlian/wchorlian/genomes/shewanella_genomes/checkm2_shewanella_results
+  --output-directory /scratch/wchorlian/genomes/shewanella_genomes/checkm2_shewanella_results
 
 checkm2 predict \
   --threads 8 \
@@ -48,15 +51,21 @@ checkm2 predict \
 ## Install QUAST and run assembly QC
 mamba install -n quality_control -c conda-forge -c bioconda python=3.11 quast
 
-quast.py \
-  /home/wchorlian/wchorlian/genomes/psychromonas_genomes/*.fasta \
-  --threads 8 \
-  -o /home/wchorlian/wchorlian/genomes/psychromonas_genomes/quast_psychromonas_results
+screen -S quast_psychromonas
+screen -S quast_shewanella
+screen -S quast_colwellia
+screen -S quast_moritella
+screen -S quast_photobacterium
 
 quast.py \
-  /home/wchorlian/wchorlian/genomes/shewanella_genomes/*.fasta \
+  /scratch/wchorlian/genomes/psychromonas_genomes/*.fasta \
   --threads 8 \
-  -o /home/wchorlian/wchorlian/genomes/shewanella_genomes/quast_shewanella_results
+  -o /scratch/wchorlian/genomes/psychromonas_genomes/quast_psychromonas_results
+
+quast.py \
+  /scratch/wchorlian/genomes/shewanella_genomes/*.fasta \
+  --threads 8 \
+  -o /scratch/wchorlian/genomes/shewanella_genomes/quast_shewanella_results
 
 quast.py \
   /scratch/wchorlian/genomes/colwellia_genomes/*.fna \
@@ -77,16 +86,22 @@ quast.py \
 mamba install -c conda-forge -c bioconda gtdbtk=2.7.2
 export GTDBTK_DATA_PATH=/data_store/gtdbtk_files/release232 ###Set database path
 
+screen -S gtdbtk_psychromonas
+screen -S gtdbtk_shewanella
+screen -S gtdbtk_colwellia
+screen -S gtdbtk_moritella
+screen -S gtdbtk_photobacterium
+
 gtdbtk classify_wf \
-  --genome_dir /home/wchorlian/wchorlian/genomes/psychromonas_genomes \
+  --genome_dir /scratch/wchorlian/genomes/psychromonas_genomes \
   --extension fasta \
-  --out_dir /home/wchorlian/wchorlian/genomes/psychromonas_genomes/gtdbtk_results \
+  --out_dir /scratch/wchorlian/genomes/psychromonas_genomes/gtdbtk_results \
   --cpus 8
 
 gtdbtk classify_wf \
-  --genome_dir /home/wchorlian/wchorlian/genomes/shewanella_genomes \
+  --genome_dir /scratch/wchorlian/genomes/shewanella_genomes \
   --extension fasta \
-  --out_dir /home/wchorlian/wchorlian/genomes/shewanella_genomes/gtdbtk_results \
+  --out_dir /scratch/wchorlian/genomes/shewanella_genomes/gtdbtk_results \
   --cpus 8
 
 gtdbtk classify_wf \
