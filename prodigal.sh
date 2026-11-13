@@ -1,8 +1,8 @@
 #Install Prodigal and run predictions
 conda create --name prodigal
 conda activate prodgial
-conda install -n bakta -c conda-forge mamba
-mamba install -n bakta -c conda-forge -c bioconda prodigal
+conda install -n prodigal -c conda-forge mamba
+mamba install -n prodigal -c conda-forge -c bioconda prodigal
 
 # Create shewanella prodigal output directory
 mkdir -p shewanella_genomes/prodigal_results
