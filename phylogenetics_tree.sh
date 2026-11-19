@@ -143,3 +143,33 @@ iqtree \
     -B 1000 \
     -T "8" \
     --prefix "/scratch/wchorlian/genomes/photobacterium_genomes/iqtree/photobacterium_iqtree"
+
+
+# Generate list of all genomes retained for phylogenomic analysis
+find "$(realpath "/scratch/wchorlian/genomes")" \
+    -maxdepth 2 \
+    -type f \
+    \( -name "*.fasta" -o -name "*.fna" \) \
+    | sort \
+    > "/scratch/wchorlian/all_gammaproteobacteria/genomes.list"
+
+# Extract and align conserved bacterial single-copy genes
+# using GToTree and the bacterial HMM set.
+GToTree \
+    -f "/scratch/wchorlian/all_gammaproteobacteria/genomes.list" \
+    -H Bacteria \
+    -B \
+    -o "/scratch/wchorlian/all_gammaproteobacteria/gtotree" \
+    -t "8"
+
+# Infer maximum-likelihood phylogeny using ModelFinder
+# and 1,000 ultrafast bootstrap replicates.
+mkdir /scratch/wchorlian/all_gammaproteobacteria/iqtree
+
+iqtree \
+    -s "/scratch/wchorlian/all_gammaproteobacteria/gtotree/Aligned_SCGs.faa" \
+    -m MFP \
+    -B 1000 \
+    -T "8" \
+    --prefix "/scratch/wchorlian/all_gammaproteobacteria/iqtree/all_gammaproteobacteria_iqtree"
+
