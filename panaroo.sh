@@ -97,3 +97,34 @@ panaroo \
     -o /scratch/wchorlian/genomes/shewanella_genomes/panaroo_results \
     --clean-mode strict \
     -t 8
+
+
+# Run panaroo on all gammaproteobacteria genomes
+screen -S all_panaroo
+
+mkdir -p /scratch/wchorlian/genomes/shewanella_genomes/panaroo_results
+
+output="/scratch/wchorlian/all_gammaproteobacteria/panaroo_results/panaroo_input_list.txt"
+> "$output"
+for genus in colwellia moritella photobacterium psychromonas shewanella; do
+    dir="/scratch/wchorlian/genomes/${genus}_genomes"
+    for gff in "$dir"/prodigal_results/*.gff; do
+        name=$(basename "$gff" .gff)
+        genome=$(find "$dir" -maxdepth 1 -type f \( \
+            -name "${name}.fna" -o \
+            -name "${name}.fasta" \
+        \) | head -n 1)
+
+        if [[ -n "$genome" ]]; then
+            echo "$gff $genome" >> "$output"
+        else
+            echo "MISSING GENOME: $name"
+        fi
+    done
+done
+
+panaroo \
+    -i /scratch/wchorlian/all_gammaproteobacteria/panaroo_results/panaroo_input_list.txt \
+    -o /scratch/wchorlian/all_gammaproteobacteria/panaroo_results \
+    --clean-mode strict \
+    -t 8
